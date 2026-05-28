@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quickware — Fast Fashion Delivery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0A0A0F;--ink2:#16161E;--lime:#C9F53D;--lime2:#d4f95a;--coral:#FF4D35;
+  --cream:#F8F6F2;--white:#FFFFFF;--muted:#8A8A95;--border:#E5E4EF;
+  --shadow:0 2px 20px rgba(0,0,0,0.07);--shadow-lg:0 8px 40px rgba(0,0,0,0.12);
+  --r:12px;--r2:20px;--r3:28px;
+  --green:#22C55E;--orange:#F97316;--blue:#3B82F6;--purple:#8B5CF6;
+}
+body{font-family:'Satoshi',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+.ff{font-family:'Clash Display',sans-serif}
+.hidden{display:none!important}
+a{color:inherit;text-decoration:none}
+button{font-family:'Satoshi',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'Satoshi',sans-serif}
+
+/* ===== SPLASH ===== */
+#splash{position:fixed;inset:0;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s ease}
+.splash-logo{font-family:'Clash Display',sans-serif;font-size:56px;font-weight:700;color:var(--lime);letter-spacing:-2px;margin-bottom:12px}
+.splash-tag{color:#666;font-size:16px;letter-spacing:2px;text-transform:uppercase;font-weight:300}
+.splash-loader{margin-top:48px;display:flex;gap:8px}
+.splash-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);animation:bounce 1.2s ease infinite}
+.splash-dot:nth-child(2){animation-delay:0.2s}
+.splash-dot:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-12px)}}
+
+/* ===== AUTH WRAPPER ===== */
+#auth-wrapper{display:flex;min-height:100vh}
+.auth-left{flex:1;background:var(--ink);display:flex;flex-direction:column;justify-content:space-between;padding:48px;min-height:100vh;position:relative;overflow:hidden}
+.auth-left-deco{position:absolute;bottom:-80px;right:-80px;width:360px;height:360px;border-radius:50%;background:rgba(201,245,61,0.06);pointer-events:none}
+.auth-left-deco2{position:absolute;top:100px;left:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,77,53,0.05);pointer-events:none}
+.auth-brand{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;color:var(--lime)}
+.auth-left-content{flex:1;display:flex;flex-direction:column;justify-content:center}
+.auth-left h1{font-family:'Clash Display',sans-serif;font-size:52px;font-weight:700;color:#fff;line-height:1.15;letter-spacing:-1.5px;margin-bottom:20px}
+.auth-left h1 span{color:var(--lime)}
+.auth-left p{color:#888;font-size:16px;line-height:1.6;max-width:380px}
+.auth-stats{display:flex;gap:32px;margin-top:40px}
+.auth-stat-val{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;color:#fff}
+.auth-stat-label{font-size:13px;color:#666;margin-top:2px}
+.auth-left-bottom{color:#555;font-size:13px}
+.auth-right{width:480px;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:48px;min-height:100vh;overflow-y:auto}
+.auth-form-title{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px}
+.auth-form-sub{color:var(--muted);font-size:14px;margin-bottom:32px}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:#444}
+.form-input{width:100%;height:48px;border:1.5px solid var(--border);border-radius:var(--r);padding:0 14px;font-size:14px;outline:none;transition:border-color 0.15s;background:#fafafa}
+.form-input:focus{border-color:var(--ink);background:#fff}
+.form-input-icon{position:relative}
+.form-input-icon .form-input{padding-left:42px}
+.form-input-icon .fi-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:#aaa}
+.form-input-icon .fi-right{left:auto;right:14px;cursor:pointer}
+.btn-primary{width:100%;height:50px;background:var(--ink);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;letter-spacing:0.2px;transition:all 0.15s}
+.btn-primary:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+.btn-lime{background:var(--lime);color:var(--ink)}
+.btn-lime:hover{background:var(--lime2)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:#ccc;font-size:13px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.social-btn{width:100%;height:46px;border:1.5px solid var(--border);border-radius:var(--r);background:#fff;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color 0.15s;margin-bottom:10px}
+.social-btn:hover{border-color:#aaa}
+.auth-switch{text-align:center;margin-top:24px;font-size:14px;color:var(--muted)}
+.auth-switch a{color:var(--ink);font-weight:700;text-decoration:underline;cursor:pointer}
+.otp-inputs{display:flex;gap:10px;margin-bottom:24px}
+.otp-input{flex:1;height:56px;border:1.5px solid var(--border);border-radius:var(--r);font-size:22px;font-weight:700;text-align:center;outline:none;transition:border-color 0.15s}
+.otp-input:focus{border-color:var(--ink)}
+.otp-resend{font-size:13px;color:var(--muted);text-align:center;margin-bottom:20px}
+.otp-resend span{color:var(--ink);font-weight:600;cursor:pointer}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;cursor:pointer;margin-bottom:28px;transition:color 0.15s}
+.back-link:hover{color:var(--ink)}
+.pw-strength{display:flex;gap:4px;margin-top:6px}
+.pw-bar{flex:1;height:3px;border-radius:2px;background:#eee;transition:background 0.3s}
+.pw-bar.weak{background:#FF4D35}
+.pw-bar.medium{background:#F97316}
+.pw-bar.strong{background:#22C55E}
+.pw-label{font-size:11px;margin-top:4px}
+.pw-label.weak{color:#FF4D35}
+.pw-label.medium{color:#F97316}
+.pw-label.strong{color:#22C55E}
+
+/* ===== APP LAYOUT ===== */
+#app-wrapper{display:flex;min-height:100vh;background:var(--cream)}
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:width 0.25s ease}
+.sidebar.collapsed{width:72px}
+.sb-brand{padding:24px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.06);min-height:72px}
+.sb-brand-text{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;color:var(--lime);white-space:nowrap;overflow:hidden;transition:opacity 0.2s}
+.sidebar.collapsed .sb-brand-text{opacity:0;width:0}
+.sb-toggle{margin-left:auto;background:none;border:none;color:#666;font-size:20px;padding:4px;flex-shrink:0}
+.sb-toggle:hover{color:#fff}
+.sb-nav{flex:1;padding:16px 0;overflow-y:auto;overflow-x:hidden}
+.sb-section{padding:8px 20px 4px;font-size:10px;font-weight:700;color:#444;letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;overflow:hidden;transition:opacity 0.2s}
+.sidebar.collapsed .sb-section{opacity:0}
+.sb-item{display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:pointer;border:none;background:none;color:#888;font-size:14px;font-weight:500;width:100%;text-align:left;transition:all 0.15s;border-radius:0;position:relative;white-space:nowrap}
+.sb-item:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.sb-item.active{color:#fff;background:rgba(201,245,61,0.1)}
+.sb-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--lime);border-radius:0 3px 3px 0}
+.sb-item i{font-size:20px;flex-shrink:0}
+.sb-item-text{white-space:nowrap;overflow:hidden;transition:opacity 0.2s}
+.sidebar.collapsed .sb-item-text{opacity:0;width:0}
+.sb-badge{margin-left:auto;background:var(--lime);color:var(--ink);font-size:10px;font-weight:800;border-radius:10px;padding:1px 7px;flex-shrink:0}
+.sidebar.collapsed .sb-badge{display:none}
+.sb-bottom{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.06)}
+.sb-user{display:flex;align-items:center;gap:10px;overflow:hidden}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ink);flex-shrink:0}
+.sb-user-info{overflow:hidden;transition:opacity 0.2s}
+.sidebar.collapsed .sb-user-info{opacity:0;width:0}
+.sb-user-name{font-size:13px;font-weight:600;color:#fff;white-space:nowrap}
+.sb-user-role{font-size:11px;color:#666;white-space:nowrap}
+
+/* MAIN */
+.main-content{margin-left:240px;flex:1;transition:margin-left 0.25s ease;min-height:100vh}
+.main-content.sidebar-collapsed{margin-left:72px}
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;padding:0 28px;gap:16px;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;letter-spacing:-0.3px}
+.topbar-search{flex:1;max-width:380px;position:relative;margin:0 24px}
+.topbar-search input{width:100%;height:38px;border:1.5px solid var(--border);border-radius:32px;padding:0 14px 0 38px;font-size:13px;outline:none;background:var(--cream)}
+.topbar-search input:focus{border-color:#aaa;background:#fff}
+.topbar-search .ts-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;color:#aaa}
+.topbar-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.tb-icon-btn{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;color:#555;position:relative;cursor:pointer}
+.tb-icon-btn:hover{border-color:#aaa;color:var(--ink)}
+.tb-notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--coral);border:2px solid #fff}
+.tb-loc{display:flex;align-items:center;gap:6px;background:var(--cream);border-radius:32px;padding:6px 14px;font-size:12px;font-weight:500;color:#555}
+.tb-loc i{font-size:14px;color:var(--coral)}
+
+/* PAGE CONTENT */
+.page-body{padding:28px;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:var(--r2);padding:20px 22px;border:1px solid var(--border)}
+.stat-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.stat-icon{width:42px;height:42px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:20px}
+.stat-icon.lime{background:#f0fce0;color:#3a7a00}
+.stat-icon.coral{background:#fff0ec;color:#c0341d}
+.stat-icon.blue{background:#eff6ff;color:#2563eb}
+.stat-icon.purple{background:#f5f3ff;color:#7c3aed}
+.stat-val{font-family:'Clash Display',sans-serif;font-size:28px;font-weight:700;letter-spacing:-0.5px}
+.stat-label{font-size:13px;color:var(--muted);margin-top:2px}
+.stat-change{font-size:12px;font-weight:600;margin-top:8px}
+.stat-change.up{color:var(--green)}
+.stat-change.down{color:var(--coral)}
+
+/* GRID LAYOUTS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-7-5{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:20px}
+
+/* CARDS */
+.card{background:#fff;border-radius:var(--r2);border:1px solid var(--border);overflow:hidden}
+.card-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:15px;font-weight:700}
+.card-body{padding:22px}
+.card-action{background:none;border:none;font-size:13px;color:var(--muted);font-weight:500;cursor:pointer}
+.card-action:hover{color:var(--ink)}
+
+/* SECTIONS/CATEGORY CHIPS */
+.chip-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 0 4px}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{padding:7px 16px;border-radius:32px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* PRODUCT GRID - DESKTOP */
+.prod-grid-d{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.prod-grid-d.cols-3{grid-template-columns:repeat(3,1fr)}
+.prod-card-d{background:#fff;border-radius:var(--r2);overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all 0.18s}
+.prod-card-d:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:transparent}
+.prod-img-d{height:200px;display:flex;align-items:center;justify-content:center;font-size:72px;background:linear-gradient(135deg,#f7f7f7,#eeeeee);position:relative}
+.prod-img-d .badge-sale{position:absolute;top:10px;left:10px;background:var(--coral);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px}
+.prod-img-d .badge-eta{position:absolute;bottom:10px;left:10px;background:var(--lime);color:var(--ink);font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px}
+.prod-img-d .btn-wish{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.95);border:none;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s}
+.prod-img-d .btn-wish:hover{transform:scale(1.15)}
+.prod-body-d{padding:14px}
+.prod-brand-d{font-size:11px;color:var(--muted);margin-bottom:2px;font-weight:500}
+.prod-name-d{font-size:14px;font-weight:700;margin-bottom:8px;line-height:1.3}
+.prod-price-d{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.prod-price-d .price{font-size:17px;font-weight:800;font-family:'Clash Display',sans-serif}
+.prod-price-d .orig{font-size:12px;color:#bbb;text-decoration:line-through}
+.btn-add-d{width:100%;height:36px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;transition:all 0.15s}
+.btn-add-d:hover{background:var(--lime);color:var(--ink)}
+
+/* FILTER BAR DESKTOP */
+.filter-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:16px}
+.filter-left{display:flex;gap:8px;flex-wrap:wrap}
+.sort-select-d{height:38px;border:1.5px solid var(--border);border-radius:10px;padding:0 12px;font-size:13px;outline:none;background:#fff;cursor:pointer}
+.result-count{font-size:13px;color:var(--muted)}
+
+/* PDP DESKTOP */
+.pdp-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:960px}
+.pdp-img-d{height:480px;border-radius:var(--r3);background:linear-gradient(135deg,#f5f5f5,#ebebeb);display:flex;align-items:center;justify-content:center;font-size:150px;position:relative;overflow:hidden}
+.pdp-thumbs{display:flex;gap:8px;margin-top:12px}
+.pdp-thumb{width:64px;height:64px;border-radius:var(--r);background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid transparent;cursor:pointer}
+.pdp-thumb.active{border-color:var(--ink)}
+.pdp-info-d .brand{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:4px}
+.pdp-info-d .title{font-family:'Clash Display',sans-serif;font-size:32px;font-weight:700;letter-spacing:-0.5px;margin-bottom:10px;line-height:1.2}
+.pdp-info-d .rating-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.pdp-info-d .stars{color:#FBBF24;font-size:16px}
+.pdp-info-d .rating-num{font-weight:700}
+.pdp-info-d .rating-count{color:var(--muted);font-size:13px}
+.price-block{background:var(--cream);border-radius:var(--r2);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.price-block .big{font-family:'Clash Display',sans-serif;font-size:34px;font-weight:700}
+.price-block .strike{font-size:16px;color:#bbb;text-decoration:line-through}
+.price-block .off-badge{background:var(--coral);color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:10px}
+.eta-pill{display:inline-flex;align-items:center;gap:6px;background:#f0fce0;color:#2d6a00;font-size:13px;font-weight:600;padding:6px 14px;border-radius:32px;margin-bottom:16px}
+.sizes-wrap{margin-bottom:20px}
+.sizes-wrap .sl{font-size:14px;font-weight:700;margin-bottom:10px}
+.sizes-wrap .size-grid{display:flex;gap:8px;flex-wrap:wrap}
+.sz-btn{width:52px;height:52px;border-radius:10px;border:1.5px solid var(--border);background:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center}
+.sz-btn.active{border-color:var(--lime);background:#f3fce0;border-width:2.5px}
+.sz-btn.sold{opacity:0.3;cursor:not-allowed;text-decoration:line-through}
+.pdp-cta-row{display:flex;gap:12px;margin-bottom:20px}
+.btn-bag{flex:1;height:52px;background:var(--ink);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;transition:all 0.15s}
+.btn-bag:hover{background:var(--lime);color:var(--ink)}
+.btn-wish-big{width:52px;height:52px;border:1.5px solid var(--border);background:#fff;border-radius:14px;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* CART PAGE */
+.cart-layout{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+.cart-item-d{background:#fff;border-radius:var(--r2);border:1px solid var(--border);padding:20px;display:flex;gap:16px;margin-bottom:14px}
+.cart-img-d{width:88px;height:88px;border-radius:12px;background:linear-gradient(135deg,#f0f0f0,#e8e8e8);display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0}
+.cart-info-d{flex:1}
+.cart-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.cart-meta{font-size:13px;color:var(--muted);margin-bottom:10px}
+.cart-price-big{font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700}
+.qty-ctrl-d{display:flex;align-items:center;gap:10px;margin-top:8px}
+.qty-btn-d{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.qty-btn-d:hover{border-color:var(--ink)}
+.qty-num-d{font-size:15px;font-weight:700;min-width:24px;text-align:center}
+.rm-btn-d{margin-left:auto;background:none;border:none;color:var(--coral);font-size:13px;font-weight:600;cursor:pointer}
+.order-summary-card{background:#fff;border-radius:var(--r2);border:1px solid var(--border);padding:24px;position:sticky;top:80px}
+.os-title{font-family:'Clash Display',sans-serif;font-size:18px;font-weight:700;margin-bottom:18px}
+.os-row{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid #f5f5f5}
+.os-row:last-child{border-bottom:none;font-weight:700;font-size:16px;padding-top:12px}
+.coupon-row{display:flex;gap:8px;margin:16px 0}
+.coupon-row input{flex:1;height:42px;border:1.5px solid var(--border);border-radius:10px;padding:0 14px;font-size:13px;outline:none}
+.coupon-row input:focus{border-color:var(--ink)}
+.coupon-row button{height:42px;padding:0 18px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700}
+.btn-checkout-d{width:100%;height:52px;background:var(--lime);color:var(--ink);border:none;border-radius:14px;font-size:15px;font-weight:800;margin-top:16px;cursor:pointer;transition:all 0.15s;font-family:'Clash Display',sans-serif}
+.btn-checkout-d:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,245,61,0.4)}
+.empty-state{text-align:center;padding:80px 40px}
+.empty-icon{font-size:80px;margin-bottom:20px}
+.empty-title{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.empty-sub{color:var(--muted);margin-bottom:24px;font-size:14px}
+
+/* CHECKOUT */
+.checkout-layout{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+.addr-card-d{border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;cursor:pointer;position:relative;transition:border-color 0.15s}
+.addr-card-d.sel{border-color:var(--ink);border-width:2px}
+.addr-tag{display:inline-block;font-size:10px;font-weight:700;background:var(--cream);padding:2px 8px;border-radius:6px;margin-bottom:6px}
+.addr-name{font-size:14px;font-weight:700}
+.addr-text{font-size:13px;color:var(--muted);margin-top:2px}
+.addr-check{position:absolute;top:16px;right:16px;width:22px;height:22px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.addr-card-d.sel .addr-check{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+.pay-opt-d{display:flex;align-items:center;gap:14px;border:1.5px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;margin-bottom:8px;transition:all 0.15s}
+.pay-opt-d.sel{border-color:var(--ink);border-width:2px;background:#fafff0}
+.pay-icon-d{width:40px;height:40px;border-radius:10px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:20px}
+.pay-label-d{font-size:14px;font-weight:700}
+.pay-sub-d{font-size:12px;color:var(--muted)}
+.pay-radio-d{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid #ddd;display:flex;align-items:center;justify-content:center}
+.pay-opt-d.sel .pay-radio-d{background:var(--ink);border-color:var(--ink)}
+.pay-radio-dot-d{width:8px;height:8px;border-radius:50%;background:#fff}
+.place-btn-d{width:100%;height:54px;background:var(--lime);color:var(--ink);border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Clash Display',sans-serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.place-btn-d:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,245,61,0.4)}
+.place-btn-d:disabled{opacity:0.7;cursor:not-allowed}
+
+/* SUCCESS */
+.success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center}
+.success-icon-big{font-size:100px;margin-bottom:24px;animation:popIn 0.5s ease}
+@keyframes popIn{0%{transform:scale(0)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+.success-title{font-family:'Clash Display',sans-serif;font-size:40px;font-weight:700;margin-bottom:10px}
+.success-sub{color:var(--muted);font-size:16px;line-height:1.6;margin-bottom:32px}
+.order-track-card{background:#fff;border-radius:var(--r2);border:1px solid var(--border);padding:24px;width:480px;margin-bottom:24px;text-align:left}
+.track-row{display:flex;align-items:center;justify-content:space-between;font-size:14px;padding:8px 0}
+.track-row .tl{display:flex;align-items:center;gap:10px}
+.track-line{width:2px;height:24px;background:#eee;margin:0 0 0 8px}
+.btn-success-primary{height:50px;padding:0 40px;background:var(--ink);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;width:100%}
+.btn-success-sec{height:50px;padding:0 40px;background:#fff;color:var(--ink);border:1.5px solid var(--border);border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
+
+/* DRIVER DASHBOARD */
+.driver-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.driver-map{background:#fff;border-radius:var(--r2);border:1px solid var(--border);overflow:hidden;margin-bottom:20px}
+.map-placeholder{height:320px;background:linear-gradient(135deg,#e8f4e8,#d0e8d0);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.map-grid{position:absolute;inset:0;opacity:0.3;background-image:linear-gradient(rgba(0,100,0,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(0,100,0,0.1) 1px,transparent 1px);background-size:40px 40px}
+.map-road-h{position:absolute;top:50%;transform:translateY(-50%);left:0;right:0;height:28px;background:rgba(150,150,150,0.3);border-top:1px solid rgba(0,0,0,0.08);border-bottom:1px solid rgba(0,0,0,0.08)}
+.map-road-v{position:absolute;left:45%;top:0;bottom:0;width:28px;background:rgba(150,150,150,0.3);border-left:1px solid rgba(0,0,0,0.08);border-right:1px solid rgba(0,0,0,0.08)}
+.map-driver-pin{position:absolute;top:44%;left:43%;width:40px;height:40px;background:var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--lime);box-shadow:0 0 0 8px rgba(10,10,15,0.15);animation:pulse 2s ease infinite}
+.map-delivery-pin{position:absolute;top:22%;left:65%;width:36px;height:36px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 0 0 6px rgba(255,77,53,0.15)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 8px rgba(10,10,15,0.15)}50%{box-shadow:0 0 0 16px rgba(10,10,15,0.05)}}
+.map-label{position:absolute;font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap}
+.map-label.driver{background:var(--ink);color:var(--lime);top:38%;left:50%}
+.map-label.dest{background:var(--coral);color:#fff;top:16%;left:64%}
+.active-order-card{background:#fff;border-radius:var(--r2);border:1.5px solid var(--lime);padding:20px;margin-bottom:16px}
+.ao-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ao-badge{background:var(--lime);color:var(--ink);font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px}
+.ao-id{font-size:13px;color:var(--muted);font-weight:500}
+.ao-customer{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ao-avatar{width:42px;height:42px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--lime)}
+.ao-name{font-size:14px;font-weight:700}
+.ao-addr{font-size:12px;color:var(--muted);margin-top:1px}
+.ao-items{font-size:13px;color:#555;margin-bottom:12px;padding:10px;background:var(--cream);border-radius:10px}
+.ao-actions{display:flex;gap:10px}
+.btn-pickup{flex:1;height:42px;background:var(--lime);color:var(--ink);border:none;border-radius:12px;font-size:14px;font-weight:700}
+.btn-navigate{height:42px;width:42px;border:1.5px solid var(--border);background:#fff;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.delivery-history-table{width:100%;border-collapse:collapse;font-size:14px}
+.delivery-history-table th{text-align:left;padding:10px 14px;font-size:12px;font-weight:700;color:var(--muted);border-bottom:1px solid var(--border)}
+.delivery-history-table td{padding:12px 14px;border-bottom:1px solid #f5f5f5}
+.delivery-history-table tr:hover td{background:#fafafa}
+.status-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:8px}
+.status-badge.delivered{background:#f0fce0;color:#2d6a00}
+.status-badge.pending{background:#fff8ec;color:#b45309}
+.status-badge.cancelled{background:#fff0ec;color:#c0341d}
+.driver-toggle{display:flex;align-items:center;gap:12px;background:#fff;border-radius:32px;padding:6px 16px;border:1px solid var(--border)}
+.toggle-label{font-size:13px;font-weight:600}
+.toggle-sw{width:44px;height:24px;border-radius:12px;position:relative;cursor:pointer;transition:background 0.2s}
+.toggle-sw.on{background:var(--lime)}
+.toggle-sw.off{background:#ddd}
+.toggle-knob{position:absolute;top:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.15);transition:left 0.2s}
+.toggle-sw.on .toggle-knob{left:22px}
+.toggle-sw.off .toggle-knob{left:2px}
+
+/* PROFILE PAGE */
+.profile-wrap{max-width:720px}
+.profile-header-card{background:#fff;border-radius:var(--r2);border:1px solid var(--border);padding:28px;display:flex;align-items:center;gap:20px;margin-bottom:20px}
+.profile-avatar-big{width:80px;height:80px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--lime);flex-shrink:0}
+.profile-name{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700}
+.profile-email{font-size:14px;color:var(--muted);margin-top:2px}
+.profile-badge{display:inline-flex;align-items:center;gap:4px;background:var(--ink);color:var(--lime);font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;margin-top:8px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.profile-stat{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:16px;text-align:center}
+.profile-stat-val{font-family:'Clash Display',sans-serif;font-size:24px;font-weight:700}
+.profile-stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.menu-list{background:#fff;border-radius:var(--r2);border:1px solid var(--border);overflow:hidden}
+.menu-item{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.1s}
+.menu-item:last-child{border-bottom:none}
+.menu-item:hover{background:var(--cream)}
+.menu-item-icon{width:40px;height:40px;border-radius:10px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.menu-item-label{font-size:14px;font-weight:600;flex:1}
+.menu-item-sub{font-size:12px;color:var(--muted)}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:20px}
+.breadcrumb span{cursor:pointer}
+.breadcrumb span:hover{color:var(--ink)}
+.breadcrumb .sep{color:#ccc}
+.breadcrumb .current{color:var(--ink);font-weight:600}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--ink);color:#fff;padding:14px 20px;border-radius:14px;font-size:14px;font-weight:500;z-index:9999;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);animation:slideUp 0.3s ease;transform:translateY(0)}
+.toast.hide{animation:slideDown 0.3s ease forwards}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes slideDown{from{transform:translateY(0);opacity:1}to{transform:translateY(20px);opacity:0}}
+.toast-icon{font-size:18px}
+
+/* SECTION TITLE */
+.sec-title{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:20px}
+
+/* RESPONSIVE */
+@media(max-width:1200px){
+  .stats-grid,.driver-stats{grid-template-columns:repeat(2,1fr)}
+  .prod-grid-d{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">⚡ Quickware</div>
+  <div class="splash-tag">Fashion at lightning speed</div>
+  <div class="splash-loader">
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+    <div class="splash-dot"></div>
+  </div>
+</div>
+
+<!-- AUTH WRAPPER -->
+<div id="auth-wrapper" style="display:none">
+  <div class="auth-left">
+    <div class="auth-left-deco"></div>
+    <div class="auth-left-deco2"></div>
+    <div class="auth-brand">⚡ Quickware</div>
+    <div class="auth-left-content">
+      <h1>Style Delivered <span>Under 60</span> Minutes</h1>
+      <p>Fresh fashion drops delivered from local stores directly to your door. No waiting, no compromise.</p>
+      <div class="auth-stats">
+        <div>
+          <div class="auth-stat-val">50K+</div>
+          <div class="auth-stat-label">Happy customers</div>
+        </div>
+        <div>
+          <div class="auth-stat-val">8K+</div>
+          <div class="auth-stat-label">Products</div>
+        </div>
+        <div>
+          <div class="auth-stat-val">40min</div>
+          <div class="auth-stat-label">Avg delivery</div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-left-bottom">© 2025 Quickware Technologies Pvt. Ltd. · Hyderabad</div>
+  </div>
+  <div class="auth-right" id="auth-right">
+    <!-- injected -->
+  </div>
+</div>
+
+<!-- APP WRAPPER -->
+<div id="app-wrapper" style="display:none">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <span style="font-size:22px">⚡</span>
+      <span class="sb-brand-text">Quickware</span>
+      <button class="sb-toggle" id="sb-toggle-btn"><i class="ti ti-layout-sidebar-left-collapse"></i></button>
+    </div>
+    <div class="sb-nav" id="sb-nav">
+      <div class="sb-section">Main</div>
+      <button class="sb-item active" data-nav="home"><i class="ti ti-home"></i><span class="sb-item-text">Home</span></button>
+      <button class="sb-item" data-nav="shop"><i class="ti ti-layout-grid"></i><span class="sb-item-text">Shop</span></button>
+      <button class="sb-item" data-nav="cart"><i class="ti ti-shopping-cart"></i><span class="sb-item-text">Cart</span><span class="sb-badge" id="cart-badge">0</span></button>
+      <button class="sb-item" data-nav="wishlist"><i class="ti ti-heart"></i><span class="sb-item-text">Wishlist</span></button>
+      <div class="sb-section">Driver</div>
+      <button class="sb-item" data-nav="driver"><i class="ti ti-truck-delivery"></i><span class="sb-item-text">Driver Dashboard</span></button>
+      <button class="sb-item" data-nav="driver-history"><i class="ti ti-history"></i><span class="sb-item-text">Delivery History</span></button>
+      <div class="sb-section">Account</div>
+      <button class="sb-item" data-nav="profile"><i class="ti ti-user-circle"></i><span class="sb-item-text">Profile</span></button>
+      <button class="sb-item" data-nav="settings"><i class="ti ti-settings"></i><span class="sb-item-text">Settings</span></button>
+    </div>
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <div class="sb-avatar">A</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name">Arjun Mehta</div>
+          <div class="sb-user-role">Quick Member</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main-content" id="main-content">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Home</div>
+      <div class="topbar-search">
+        <i class="ti ti-search ts-icon"></i>
+        <input placeholder="Search products, brands..." id="topbar-search-input">
+      </div>
+      <div class="topbar-right">
+        <div class="tb-loc"><i class="ti ti-map-pin"></i>Hyderabad, IN</div>
+        <button class="tb-icon-btn" onclick="navigate('cart')"><i class="ti ti-shopping-cart"></i><span class="tb-notif-dot" id="cart-dot" style="display:none"></span></button>
+        <button class="tb-icon-btn"><i class="ti ti-bell"></i><span class="tb-notif-dot"></span></button>
+        <button class="tb-icon-btn" onclick="navigate('profile')"><i class="ti ti-user-circle"></i></button>
+        <button class="tb-icon-btn" id="logout-btn" title="Logout"><i class="ti ti-logout"></i></button>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page-body" id="page-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast hidden" id="toast">
+  <span class="toast-icon" id="toast-icon">✓</span>
+  <span id="toast-msg">Added to cart!</span>
+</div>
+
+<script>
+const PRODUCTS = [
+  {id:1,name:'Oversized Drop Tee',brand:'Urban Threads',price:899,orig:1499,emoji:'👕',cat:'Men',sizes:['S','M','L','XL'],eta:'45 min',disc:40,stock:'in'},
+  {id:2,name:'Floral Midi Dress',brand:'Bloom Studio',price:1299,orig:1999,emoji:'👗',cat:'Women',sizes:['XS','S','M','L'],eta:'52 min',disc:35,stock:'in'},
+  {id:3,name:'Air Knit Jogger',brand:'Stride Co.',price:799,orig:1199,emoji:'👖',cat:'Men',sizes:['S','M','L'],eta:'38 min',disc:33,stock:'low'},
+  {id:4,name:'Linen Blazer Set',brand:'Studio Nine',price:2499,orig:3499,emoji:'🧥',cat:'Women',sizes:['S','M','L','XL'],eta:'55 min',disc:29,stock:'in'},
+  {id:5,name:'Chunky Runner',brand:'Sole Story',price:1899,orig:2799,emoji:'👟',cat:'Footwear',sizes:['7','8','9','10','11'],eta:'40 min',disc:32,stock:'in'},
+  {id:6,name:'Canvas Tote Bag',brand:'Carry More',price:599,orig:899,emoji:'👜',cat:'Casuals',sizes:['One Size'],eta:'30 min',disc:33,stock:'in'},
+  {id:7,name:'Wide Leg Trousers',brand:'Form & Co.',price:1199,orig:1699,emoji:'👔',cat:'Women',sizes:['XS','S','M','L'],eta:'50 min',disc:29,stock:'low'},
+  {id:8,name:'Graphic Tee Pack',brand:'Print Lab',price:699,orig:999,emoji:'🎽',cat:'Men',sizes:['S','M','L','XL'],eta:'42 min',disc:30,stock:'in'},
+];
+
+const CATS = ['All','Men','Women','Footwear','Casuals'];
+
+let state = {
+  authView: 'login',
+  currentNav: 'home',
+  cat: 'All',
+  filterCat: 'All',
+  sort: 'trending',
+  cart: [],
+  wishlist: [],
+  selectedProduct: null,
+  selectedSize: null,
+  payMethod: 'upi',
+  selectedAddr: 0,
+  placing: false,
+  showPdp: false,
+  prevNav: 'shop',
+  driverOnline: true,
+  sidebarCollapsed: false,
+};
+
+function totalItems(){return state.cart.reduce((a,c)=>a+c.qty,0)}
+function cartSubtotal(){return state.cart.reduce((a,c)=>a+(c.price*c.qty),0)}
+function updateCartBadge(){
+  const n=totalItems();
+  document.querySelectorAll('#cart-badge').forEach(el=>el.textContent=n);
+  const dot=document.getElementById('cart-dot');
+  if(dot) dot.style.display=n>0?'block':'none';
+}
+
+function showToast(msg,icon='✓'){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  document.getElementById('toast-icon').textContent=icon;
+  t.classList.remove('hidden','hide');
+  setTimeout(()=>{t.classList.add('hide');setTimeout(()=>t.classList.add('hidden'),300);},2500);
+}
+
+// ===== SPLASH =====
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const s=document.getElementById('splash');
+    s.style.opacity='0';
+    setTimeout(()=>{s.style.display='none';showAuth();},500);
+  },1800);
+});
+
+function showAuth(){
+  document.getElementById('auth-wrapper').style.display='flex';
+  renderAuth('login');
+}
+
+function showApp(){
+  document.getElementById('auth-wrapper').style.display='none';
+  document.getElementById('app-wrapper').style.display='flex';
+  navigate('home');
+}
+
+// ===== AUTH =====
+function renderAuth(view){
+  state.authView=view;
+  const r=document.getElementById('auth-right');
+  if(view==='login') r.innerHTML=buildLogin();
+  else if(view==='signup') r.innerHTML=buildSignup();
+  else if(view==='otp') r.innerHTML=buildOtp();
+  else if(view==='forgot') r.innerHTML=buildForgot();
+  attachAuthEvents(view);
+}
+
+function buildLogin(){
+  return `
+    <div class="auth-form-title">Welcome back</div>
+    <div class="auth-form-sub">Sign in to continue shopping at lightning speed</div>
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <div class="form-input-icon">
+        <i class="ti ti-mail fi-icon"></i>
+        <input class="form-input" type="email" id="login-email" placeholder="arjun@example.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="display:flex;justify-content:space-between">
+        Password <a onclick="renderAuth('forgot')" style="color:var(--ink);font-size:12px;cursor:pointer">Forgot password?</a>
+      </label>
+      <div class="form-input-icon">
+        <i class="ti ti-lock fi-icon"></i>
+        <input class="form-input" type="password" id="login-pw" placeholder="Enter your password">
+        <i class="ti ti-eye fi-icon fi-right" id="toggle-pw"></i>
+      </div>
+    </div>
+    <button class="btn-primary btn-lime" style="margin-top:8px" id="btn-login">Sign in →</button>
+    <div class="auth-divider">or continue with</div>
+    <button class="social-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <div class="auth-switch">Don't have an account? <a onclick="renderAuth('signup')">Sign up free</a></div>
+  `;
+}
+
+function buildSignup(){
+  return `
+    <span class="back-link" onclick="renderAuth('login')"><i class="ti ti-arrow-left"></i> Back to login</span>
+    <div class="auth-form-title">Create account</div>
+    <div class="auth-form-sub">Join 50,000+ shoppers getting fashion fast</div>
+    <div class="form-group">
+      <label class="form-label">Full name</label>
+      <div class="form-input-icon">
+        <i class="ti ti-user fi-icon"></i>
+        <input class="form-input" type="text" id="signup-name" placeholder="Arjun Mehta">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <div class="form-input-icon">
+        <i class="ti ti-mail fi-icon"></i>
+        <input class="form-input" type="email" id="signup-email" placeholder="arjun@example.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone number</label>
+      <div class="form-input-icon">
+        <i class="ti ti-phone fi-icon"></i>
+        <input class="form-input" type="tel" id="signup-phone" placeholder="+91 98765 43210">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="form-input-icon">
+        <i class="ti ti-lock fi-icon"></i>
+        <input class="form-input" type="password" id="signup-pw" placeholder="Min. 8 characters" oninput="checkPwStrength(this.value)">
+      </div>
+      <div class="pw-strength" id="pw-strength"><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div><div class="pw-bar"></div></div>
+      <div class="pw-label" id="pw-label"></div>
+    </div>
+    <button class="btn-primary btn-lime" id="btn-signup">Create account →</button>
+    <div class="auth-switch">Already have an account? <a onclick="renderAuth('login')">Sign in</a></div>
+  `;
+}
+
+function buildOtp(){
+  return `
+    <span class="back-link" onclick="renderAuth('login')"><i class="ti ti-arrow-left"></i> Back to login</span>
+    <div style="font-size:48px;margin-bottom:16px">📱</div>
+    <div class="auth-form-title">Verify your number</div>
+    <div class="auth-form-sub">We sent a 6-digit OTP to <strong>+91 98765 43210</strong></div>
+    <div class="otp-inputs">
+      ${[1,2,3,4,5,6].map(i=>`<input class="otp-input" type="text" maxlength="1" id="otp-${i}" oninput="otpMove(this,${i})">`).join('')}
+    </div>
+    <div class="otp-resend">Didn't receive it? <span onclick="showToast('OTP resent!','📱')">Resend OTP</span></div>
+    <button class="btn-primary btn-lime" id="btn-verify">Verify & Continue →</button>
+  `;
+}
+
+function buildForgot(){
+  return `
+    <span class="back-link" onclick="renderAuth('login')"><i class="ti ti-arrow-left"></i> Back to login</span>
+    <div style="font-size:48px;margin-bottom:16px">🔐</div>
+    <div class="auth-form-title">Forgot password?</div>
+    <div class="auth-form-sub">Enter your email and we'll send a reset link</div>
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <div class="form-input-icon">
+        <i class="ti ti-mail fi-icon"></i>
+        <input class="form-input" type="email" placeholder="arjun@example.com">
+      </div>
+    </div>
+    <button class="btn-primary btn-lime" id="btn-reset">Send reset link →</button>
+    <div class="auth-switch" style="margin-top:20px">Remembered it? <a onclick="renderAuth('login')">Sign in</a></div>
+  `;
+}
+
+function attachAuthEvents(view){
+  const togglePw=document.getElementById('toggle-pw');
+  if(togglePw) togglePw.onclick=()=>{const i=document.getElementById('login-pw');i.type=i.type==='password'?'text':'password';};
+  const btnLogin=document.getElementById('btn-login');
+  if(btnLogin) btnLogin.onclick=()=>renderAuth('otp');
+  const btnSignup=document.getElementById('btn-signup');
+  if(btnSignup) btnSignup.onclick=()=>renderAuth('otp');
+  const btnVerify=document.getElementById('btn-verify');
+  if(btnVerify) btnVerify.onclick=()=>showApp();
+  const btnReset=document.getElementById('btn-reset');
+  if(btnReset) btnReset.onclick=()=>{showToast('Reset link sent!','📧');setTimeout(()=>renderAuth('login'),1500);};
+}
+
+function checkPwStrength(v){
+  const bars=document.querySelectorAll('.pw-bar');
+  const label=document.getElementById('pw-label');
+  bars.forEach(b=>{b.className='pw-bar';});
+  if(v.length===0){label.textContent='';return;}
+  let score=0;
+  if(v.length>=8) score++;
+  if(/[A-Z]/.test(v)) score++;
+  if(/[0-9]/.test(v)) score++;
+  if(/[^A-Za-z0-9]/.test(v)) score++;
+  const cls=score<=1?'weak':score<=2?'medium':'strong';
+  const labels={weak:'Weak',medium:'Medium',strong:'Strong'};
+  for(let i=0;i<score;i++) bars[i].classList.add(cls);
+  label.textContent=labels[cls];
+  label.className='pw-label '+cls;
+}
+
+function otpMove(el,n){
+  if(el.value&&n<6){const next=document.getElementById(`otp-${n+1}`);if(next)next.focus();}
+}
+
+// ===== APP NAVIGATION =====
+function navigate(page){
+  state.currentNav=page;
+  state.showPdp=false;
+  // Update sidebar
+  document.querySelectorAll('.sb-item').forEach(b=>{
+    b.classList.toggle('active',b.dataset.nav===page);
+  });
+  const titles={home:'Home',shop:'Shop',cart:'Cart',wishlist:'Wishlist',driver:'Driver Dashboard',
+    'driver-history':'Delivery History',profile:'Profile',settings:'Settings'};
+  document.getElementById('topbar-title').textContent=titles[page]||page;
+  renderPage();
+  updateCartBadge();
+}
+
+function renderPage(){
+  const pb=document.getElementById('page-body');
+  if(state.showPdp){pb.innerHTML=buildPdp();attachPdpEvents();return;}
+  const map={home:buildHome,shop:buildShop,cart:buildCart,wishlist:buildWishlist,
+    driver:buildDriver,'driver-history':buildDriverHistory,profile:buildProfile,settings:buildSettings};
+  pb.innerHTML=(map[state.currentNav]||buildHome)();
+  attachPageEvents();
+}
+
+// ===== HOME PAGE =====
+function buildHome(){
+  const wishSet=new Set(state.wishlist);
+  const featured=PRODUCTS.slice(0,4).filter(p=>state.cat==='All'||p.cat===state.cat);
+  return `
+    <!-- HERO -->
+    <div style="background:var(--ink);border-radius:var(--r3);padding:40px 44px;margin-bottom:24px;display:grid;grid-template-columns:1fr 280px;align-items:center;gap:20px;overflow:hidden;position:relative;min-height:220px">
+      <div style="position:absolute;right:220px;top:0;bottom:0;width:2px;background:rgba(255,255,255,0.04)"></div>
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--coral);color:#fff;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:16px">⚡ Flash Sale — Up to 40% Off</div>
+        <h1 style="font-family:'Clash Display',sans-serif;font-size:44px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-1.5px;margin-bottom:14px">Style Delivered <br><span style="color:var(--lime)">Under 60 Minutes</span></h1>
+        <p style="color:#888;font-size:15px;margin-bottom:24px;max-width:420px">Fresh drops from your favourite brands, delivered express from local stores in Hyderabad.</p>
+        <div style="display:flex;gap:12px">
+          <button onclick="navigate('shop')" style="height:48px;padding:0 28px;background:var(--lime);color:var(--ink);border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Clash Display',sans-serif">Shop Now →</button>
+          <button onclick="navigate('shop')" style="height:48px;padding:0 24px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.12);border-radius:14px;font-size:14px;font-weight:600;cursor:pointer">View Deals</button>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:100px;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3))">👗</div>
+        <div style="color:#555;font-size:12px;margin-top:8px">1,200+ Products Available</div>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-grid" style="margin-bottom:24px">
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">50K+</span><div class="stat-icon lime"><i class="ti ti-users"></i></div></div><div class="stat-label">Happy Customers</div><div class="stat-change up">↑ 12% this month</div></div>
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">38min</span><div class="stat-icon coral"><i class="ti ti-clock"></i></div></div><div class="stat-label">Avg Delivery Time</div><div class="stat-change up">↑ 5min faster</div></div>
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">1.2K</span><div class="stat-icon blue"><i class="ti ti-shirt"></i></div></div><div class="stat-label">Products Available</div><div class="stat-change up">↑ 80 new items</div></div>
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">4.8★</span><div class="stat-icon purple"><i class="ti ti-star"></i></div></div><div class="stat-label">Average Rating</div><div class="stat-change up">Top rated app</div></div>
+    </div>
+
+    <!-- CATEGORIES + TRENDING -->
+    <div class="grid-7-5">
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div class="sec-title">Trending Now</div>
+            <div class="sec-sub">Hand-picked for you today</div>
+          </div>
+          <button onclick="navigate('shop')" class="card-action" style="font-size:13px;color:var(--muted)">See all →</button>
+        </div>
+        <div class="chip-row" style="margin-bottom:16px">
+          ${CATS.map(c=>`<button class="chip${state.cat===c?' active':''}" onclick="homeCat('${c}')">${c==='All'?'🔥 All':c}</button>`).join('')}
+        </div>
+        <div class="prod-grid-d" style="margin-bottom:0">
+          ${PRODUCTS.filter(p=>state.cat==='All'||p.cat===state.cat).slice(0,4).map(p=>buildProductCard(p,wishSet)).join('')}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <!-- PROMO CARD -->
+        <div style="background:var(--ink);border-radius:var(--r2);padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:200px;position:relative;overflow:hidden">
+          <div style="position:absolute;bottom:-30px;right:-30px;font-size:100px;opacity:0.08">🎁</div>
+          <div>
+            <div style="color:var(--lime);font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">First Order</div>
+            <div style="color:#fff;font-size:24px;font-weight:700;font-family:'Clash Display',sans-serif;line-height:1.2">Get 20% off</div>
+            <div style="color:#888;font-size:13px;margin-top:6px">Use code: QUICK20</div>
+          </div>
+          <div style="background:var(--lime);display:inline-block;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:800;color:var(--ink);cursor:pointer;width:fit-content">Claim Offer</div>
+        </div>
+        <!-- FLASH DEALS -->
+        <div class="card">
+          <div class="card-head"><span class="card-title">⚡ Flash Deals</span><span style="font-size:12px;color:var(--coral);font-weight:600">2h 14m left</span></div>
+          <div class="card-body" style="padding:14px">
+            ${PRODUCTS.filter(p=>p.disc>=32).map(p=>`
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f5f5f5;cursor:pointer" onclick="openPdp(${p.id})">
+                <div style="width:44px;height:44px;border-radius:10px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${p.emoji}</div>
+                <div style="flex:1">
+                  <div style="font-size:13px;font-weight:700">${p.name}</div>
+                  <div style="font-size:12px;color:var(--muted)">${p.brand}</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:14px;font-weight:800">₹${p.price}</div>
+                  <div style="font-size:11px;color:var(--coral);font-weight:700">-${p.disc}%</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function homeCat(c){state.cat=c;renderPage();}
+
+// ===== SHOP PAGE =====
+function buildShop(){
+  const wishSet=new Set(state.wishlist);
+  let prods=[...PRODUCTS];
+  if(state.filterCat&&state.filterCat!=='All'&&state.filterCat!=='Sale') prods=prods.filter(p=>p.cat===state.filterCat);
+  if(state.filterCat==='Sale') prods=prods.filter(p=>p.disc>=35);
+  if(state.sort==='low') prods.sort((a,b)=>a.price-b.price);
+  if(state.sort==='high') prods.sort((a,b)=>b.price-a.price);
+  if(state.sort==='newest') prods.sort((a,b)=>b.id-a.id);
+  return `
+    <div class="filter-toolbar">
+      <div class="filter-left">
+        ${['All','Men','Women','Footwear','Casuals','Sale'].map(f=>`<button class="chip${state.filterCat===f?' active':''}" onclick="setFilter('${f}')">${f}</button>`).join('')}
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="result-count">${prods.length} products</span>
+        <select class="sort-select-d" onchange="setSort(this.value)">
+          <option value="trending" ${state.sort==='trending'?'selected':''}>Trending</option>
+          <option value="low" ${state.sort==='low'?'selected':''}>Price: Low → High</option>
+          <option value="high" ${state.sort==='high'?'selected':''}>Price: High → Low</option>
+          <option value="newest" ${state.sort==='newest'?'selected':''}>Newest First</option>
+        </select>
+      </div>
+    </div>
+    <div class="prod-grid-d cols-3" style="margin-top:4px">
+      ${prods.map(p=>buildProductCard(p,wishSet)).join('')}
+      ${prods.length===0?`<div style="grid-column:1/-1;text-align:center;padding:60px;color:#888"><div style="font-size:60px;margin-bottom:16px">🔍</div><div style="font-size:18px;font-weight:700">No products found</div></div>`:''}
+    </div>
+  `;
+}
+
+function setFilter(f){state.filterCat=f;renderPage();}
+function setSort(s){state.sort=s;renderPage();}
+
+function buildProductCard(p,wishSet){
+  const liked=wishSet&&wishSet.has(p.id);
+  return `<div class="prod-card-d" onclick="openPdp(${p.id})">
+    <div class="prod-img-d">
+      ${p.disc?`<div class="badge-sale">${p.disc}% OFF</div>`:''}
+      <span>${p.emoji}</span>
+      <div class="badge-eta">⚡ ${p.eta}</div>
+      <button class="btn-wish" onclick="toggleWish(event,${p.id})">${liked?'❤️':'🤍'}</button>
+    </div>
+    <div class="prod-body-d">
+      <div class="prod-brand-d">${p.brand}</div>
+      <div class="prod-name-d">${p.name}</div>
+      <div class="prod-price-d">
+        <span class="price">₹${p.price}</span>
+        <span class="orig">₹${p.orig}</span>
+      </div>
+      <button class="btn-add-d" onclick="quickAdd(event,${p.id})">Add to Cart</button>
+    </div>
+  </div>`;
+}
+
+// ===== PDP =====
+function openPdp(id){
+  state.selectedProduct=PRODUCTS.find(p=>p.id===id);
+  state.selectedSize=null;
+  state.prevNav=state.currentNav;
+  state.showPdp=true;
+  renderPage();
+}
+
+function buildPdp(){
+  const p=state.selectedProduct;
+  if(!p) return '';
+  const liked=state.wishlist.includes(p.id);
+  return `
+    <div class="breadcrumb">
+      <span onclick="closePdp()">← Back</span>
+      <span class="sep">/</span>
+      <span onclick="closePdp()">${state.prevNav==='home'?'Home':'Shop'}</span>
+      <span class="sep">/</span>
+      <span class="current">${p.name}</span>
+    </div>
+    <div class="pdp-wrap">
+      <div>
+        <div class="pdp-img-d">${p.emoji}</div>
+        <div class="pdp-thumbs">
+          ${[0,1,2].map(i=>`<div class="pdp-thumb${i===0?' active':''}">${p.emoji}</div>`).join('')}
+        </div>
+      </div>
+      <div class="pdp-info-d">
+        <div class="brand">${p.brand}</div>
+        <div class="title">${p.name}</div>
+        <div class="rating-row">
+          <span class="stars">★★★★☆</span>
+          <span class="rating-num">4.2</span>
+          <span class="rating-count">(248 reviews)</span>
+          <span style="margin-left:8px;font-size:12px;color:${p.stock==='low'?'var(--coral)':'#2d6a00'};background:${p.stock==='low'?'#fff0ec':'#f0fce0'};padding:3px 9px;border-radius:8px;font-weight:700">${p.stock==='low'?'⚠️ Only 3 left':'✓ In Stock'}</span>
+        </div>
+        <div class="price-block">
+          <div class="big">₹${p.price}</div>
+          <div class="strike">₹${p.orig}</div>
+          <div class="off-badge">${p.disc}% OFF</div>
+        </div>
+        <div class="eta-pill">⚡ Estimated delivery in ${p.eta}</div>
+        <div class="sizes-wrap">
+          <div class="sl">Select Size ${state.selectedSize?`<span style="background:var(--ink);color:var(--lime);font-size:11px;padding:2px 8px;border-radius:6px;margin-left:4px">${state.selectedSize}</span>`:''}</div>
+          <div class="size-grid">
+            ${p.sizes.map(s=>`<button class="sz-btn${state.selectedSize===s?' active':''}" onclick="selectSize('${s}')">${s}</button>`).join('')}
+          </div>
+        </div>
+        <div class="pdp-cta-row">
+          <button class="btn-bag" onclick="pdpAddToCart()">Add to Bag ⚡</button>
+          <button class="btn-wish-big" onclick="toggleWish(event,${p.id})">${liked?'❤️':'🤍'}</button>
+        </div>
+        <div style="background:var(--cream);border-radius:var(--r);padding:16px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">About this product</div>
+          <div style="font-size:13px;color:#555;line-height:1.7">Premium quality ${p.name.toLowerCase()} crafted for everyday wear. Made with sustainable materials, this piece offers both style and comfort. Machine washable, easy to pair with any outfit in your wardrobe. Fast delivery guaranteed — from our warehouse to your door in under 60 minutes.</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function closePdp(){state.showPdp=false;state.currentNav=state.prevNav;renderPage();}
+function selectSize(s){state.selectedSize=s;renderPage();}
+function pdpAddToCart(){
+  if(!state.selectedSize){showToast('Please select a size','⚠️');return;}
+  addToCart(state.selectedProduct,state.selectedSize);
+  showToast(`Added to cart!`,'✓');
+  state.showPdp=false;
+  state.currentNav='cart';
+  navigate('cart');
+}
+
+function attachPdpEvents(){}
+
+// ===== CART =====
+function buildCart(){
+  if(state.cart.length===0) return `
+    <div class="empty-state">
+      <div class="empty-icon">🛍️</div>
+      <div class="empty-title">Your bag is empty</div>
+      <div class="empty-sub">Add items you love to see them here</div>
+      <button onclick="navigate('shop')" style="height:48px;padding:0 32px;background:var(--ink);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">Start Shopping</button>
+    </div>
+  `;
+  const sub=cartSubtotal();
+  const delivery=sub>999?0:49;
+  const tax=Math.round(sub*0.05);
+  const total=sub+delivery+tax;
+  return `
+    <div class="cart-layout">
+      <div>
+        <div style="font-size:14px;color:var(--muted);margin-bottom:16px">${totalItems()} item${totalItems()>1?'s':''} in your bag</div>
+        ${state.cart.map(item=>`
+          <div class="cart-item-d">
+            <div class="cart-img-d">${item.emoji}</div>
+            <div class="cart-info-d">
+              <div class="cart-name">${item.name}</div>
+              <div class="cart-meta">Size: ${item.size} · ${item.brand}</div>
+              <div class="cart-price-big">₹${item.price*item.qty}</div>
+              <div class="qty-ctrl-d">
+                <button class="qty-btn-d" onclick="adjustQty('${item.id+item.size}',-1)">−</button>
+                <span class="qty-num-d">${item.qty}</span>
+                <button class="qty-btn-d" onclick="adjustQty('${item.id+item.size}',1)">+</button>
+                <button class="rm-btn-d" onclick="removeItem('${item.id+item.size}')">Remove</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="order-summary-card">
+        <div class="os-title">Order Summary</div>
+        <div class="coupon-row">
+          <input placeholder="Coupon code" id="coupon-input">
+          <button onclick="applyCoupon()">Apply</button>
+        </div>
+        <div id="coupon-msg" style="font-size:12px;margin-bottom:8px"></div>
+        <div class="os-row"><span>Subtotal</span><span>₹${sub}</span></div>
+        <div class="os-row"><span>Delivery</span><span style="color:${delivery===0?'#22c55e':'inherit'}">${delivery===0?'FREE':'₹'+delivery}</span></div>
+        <div class="os-row"><span>Taxes (5%)</span><span>₹${tax}</span></div>
+        <div class="os-row"><span>Total</span><span>₹${total}</span></div>
+        ${delivery===0?`<div style="font-size:12px;color:#22c55e;margin:8px 0">🎉 You saved ₹49 on delivery!</div>`:`<div style="font-size:12px;color:var(--muted);margin:8px 0">Add ₹${999-sub} more for free delivery</div>`}
+        <button class="btn-checkout-d" onclick="navigate('checkout')">Checkout · ₹${total} →</button>
+        <div style="text-align:center;font-size:11px;color:#bbb;margin-top:10px">🔒 Secured by 256-bit SSL</div>
+      </div>
+    </div>
+  `;
+}
+
+function applyCoupon(){
+  const v=document.getElementById('coupon-input');
+  const m=document.getElementById('coupon-msg');
+  if(!v||!m) return;
+  if(v.value.trim().toUpperCase()==='QUICK20'){m.style.color='#22c55e';m.textContent='🎉 20% off applied!';}
+  else{m.style.color='var(--coral)';m.textContent='Invalid coupon code.';}
+}
+
+// ===== CHECKOUT =====
+function buildCheckout(){
+  const sub=cartSubtotal();
+  const delivery=sub>999?0:49;
+  const tax=Math.round(sub*0.05);
+  const total=sub+delivery+tax;
+  const addrs=[
+    {tag:'Home',name:'Arjun Mehta',text:'12, Jubilee Hills, Hyderabad, Telangana 500033'},
+    {tag:'Work',name:'Arjun Mehta',text:'Level 4, Skyview Tower, Hi-Tech City, Hyderabad 500081'},
+  ];
+  const pays=[
+    {id:'upi',icon:'📲',label:'UPI',sub:'PhonePe, GPay, Paytm'},
+    {id:'card',icon:'💳',label:'Credit / Debit Card',sub:'Visa, Mastercard, RuPay'},
+    {id:'wallet',icon:'👛',label:'Wallet',sub:'Amazon Pay, Mobikwik'},
+    {id:'cod',icon:'💵',label:'Cash on Delivery',sub:'Pay when you receive'},
+  ];
+  return `
+    <div class="breadcrumb"><span onclick="navigate('cart')">← Cart</span><span class="sep">/</span><span class="current">Checkout</span></div>
+    <div class="checkout-layout">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-head"><span class="card-title"><i class="ti ti-map-pin" style="color:var(--coral);margin-right:6px"></i>Delivery Address</span></div>
+          <div class="card-body">
+            ${addrs.map((a,i)=>`
+              <div class="addr-card-d${state.selectedAddr===i?' sel':''}" onclick="selectAddr(${i})">
+                <div class="addr-tag">${a.tag}</div>
+                <div class="addr-name">${a.name}</div>
+                <div class="addr-text">${a.text}</div>
+                <div class="addr-check">${state.selectedAddr===i?'✓':''}</div>
+              </div>
+            `).join('')}
+            <button style="width:100%;height:42px;border:1.5px dashed #ddd;border-radius:var(--r);background:none;font-size:13px;color:#888;cursor:pointer;margin-top:4px">+ Add new address</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title"><i class="ti ti-credit-card" style="color:var(--coral);margin-right:6px"></i>Payment Method</span></div>
+          <div class="card-body">
+            ${pays.map(p=>`
+              <div class="pay-opt-d${state.payMethod===p.id?' sel':''}" onclick="selectPay('${p.id}')">
+                <div class="pay-icon-d">${p.icon}</div>
+                <div><div class="pay-label-d">${p.label}</div><div class="pay-sub-d">${p.sub}</div></div>
+                <div class="pay-radio-d">${state.payMethod===p.id?`<div class="pay-radio-dot-d"></div>`:''}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="order-summary-card">
+          <div class="os-title">Order Summary</div>
+          ${state.cart.map(item=>`<div class="os-row"><span>${item.name} (${item.size}) ×${item.qty}</span><span>₹${item.price*item.qty}</span></div>`).join('')}
+          <div class="os-row"><span>Delivery</span><span>${delivery===0?'FREE':'₹'+delivery}</span></div>
+          <div class="os-row"><span>Taxes</span><span>₹${tax}</span></div>
+          <div class="os-row"><span>Total Payable</span><span>₹${total}</span></div>
+          <button class="place-btn-d${state.placing?' disabled':''}" id="place-btn" onclick="placeOrder()" ${state.placing?'disabled':''}>
+            ${state.placing?'Placing order...':'Place Order · ₹'+total+' ⚡'}
+          </button>
+          <div style="text-align:center;font-size:11px;color:#bbb;margin-top:8px">🔒 Secured by 256-bit SSL</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectAddr(i){state.selectedAddr=i;renderPage();}
+function selectPay(id){state.payMethod=id;renderPage();}
+function placeOrder(){
+  state.placing=true;renderPage();
+  setTimeout(()=>{
+    state.placing=false;state.cart=[];state.currentNav='success';
+    document.getElementById('page-body').innerHTML=buildSuccess();
+    updateCartBadge();
+  },2000);
+}
+
+function buildSuccess(){
+  const orderId='QW'+Math.floor(Math.random()*90000+10000);
+  return `
+    <div class="success-wrap">
+      <div class="success-icon-big">🎉</div>
+      <div class="success-title">Order Confirmed!</div>
+      <div class="success-sub">Your order <strong>#${orderId}</strong> has been placed.<br>Estimated delivery: <strong>Under 60 minutes</strong> ⚡</div>
+      <div class="order-track-card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:14px">Order Tracking</div>
+        <div class="track-row"><div class="tl"><span style="font-size:18px">📦</span> Order Placed</div><span style="color:var(--lime);font-weight:700">✓ Done</span></div>
+        <div class="track-line"></div>
+        <div class="track-row"><div class="tl" style="color:var(--muted)"><span style="font-size:18px">🏭</span> Processing</div><span style="color:var(--muted)">~5 min</span></div>
+        <div class="track-line"></div>
+        <div class="track-row"><div class="tl" style="color:var(--muted)"><span style="font-size:18px">🛵</span> Out for Delivery</div><span style="color:var(--muted)">~40 min</span></div>
+        <div class="track-line"></div>
+        <div class="track-row"><div class="tl" style="color:var(--muted)"><span style="font-size:18px">🎁</span> Delivered</div><span style="color:var(--muted)">~60 min</span></div>
+      </div>
+      <button class="btn-success-primary" onclick="navigate('home')">Continue Shopping</button>
+      <button class="btn-success-sec" onclick="showToast('Live tracking coming soon!','📍')">Track My Order</button>
+    </div>
+  `;
+}
+
+// ===== WISHLIST =====
+function buildWishlist(){
+  const items=PRODUCTS.filter(p=>state.wishlist.includes(p.id));
+  if(items.length===0) return `
+    <div class="empty-state">
+      <div class="empty-icon">❤️</div>
+      <div class="empty-title">Your wishlist is empty</div>
+      <div class="empty-sub">Save items you love by tapping the heart icon</div>
+      <button onclick="navigate('shop')" style="height:48px;padding:0 32px;background:var(--ink);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">Explore Products</button>
+    </div>
+  `;
+  return `
+    <div class="sec-title">Wishlist</div>
+    <div class="sec-sub">${items.length} saved items</div>
+    <div class="prod-grid-d">
+      ${items.map(p=>buildProductCard(p,new Set(state.wishlist))).join('')}
+    </div>
+  `;
+}
+
+// ===== DRIVER DASHBOARD =====
+function buildDriver(){
+  const deliveries=[
+    {id:'QW48210',customer:'Priya Sharma',addr:'Banjara Hills, Road No.12',items:'Floral Midi Dress (M)',amount:1299,eta:'12 min',status:'active'},
+    {id:'QW48191',customer:'Rahul Gupta',addr:'Madhapur, Lane 3',items:'Chunky Runner (9)',amount:1899,eta:'28 min',status:'next'},
+  ];
+  return `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div class="sec-title">Driver Dashboard</div>
+        <div class="sec-sub">Wednesday, 21 May 2025 · Hi-Tech City Zone</div>
+      </div>
+      <div class="driver-toggle">
+        <span class="toggle-label" style="color:${state.driverOnline?'#22c55e':'var(--muted)'}">${state.driverOnline?'Online':'Offline'}</span>
+        <div class="toggle-sw ${state.driverOnline?'on':'off'}" onclick="toggleDriverStatus()">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+    </div>
+    <div class="driver-stats">
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">8</span><div class="stat-icon lime"><i class="ti ti-truck-delivery"></i></div></div><div class="stat-label">Deliveries Today</div><div class="stat-change up">↑ 2 from yesterday</div></div>
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">₹840</span><div class="stat-icon coral"><i class="ti ti-currency-rupee"></i></div></div><div class="stat-label">Earnings Today</div><div class="stat-change up">↑ ₹120 bonus</div></div>
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">4.9★</span><div class="stat-icon blue"><i class="ti ti-star"></i></div></div><div class="stat-label">Rider Rating</div></div>
+      <div class="stat-card"><div class="stat-card-top"><span class="stat-val">38km</span><div class="stat-icon purple"><i class="ti ti-route"></i></div></div><div class="stat-label">Distance Covered</div></div>
+    </div>
+    <div class="grid-7-5">
+      <div>
+        <!-- MAP -->
+        <div class="driver-map">
+          <div class="card-head"><span class="card-title"><i class="ti ti-map" style="color:var(--coral);margin-right:6px"></i>Live Location</span><span style="font-size:12px;color:#22c55e;font-weight:600">● Live</span></div>
+          <div class="map-placeholder">
+            <div class="map-grid"></div>
+            <div class="map-road-h"></div>
+            <div class="map-road-v"></div>
+            <div class="map-driver-pin"><i class="ti ti-motorbike" style="font-size:20px;color:var(--lime)"></i></div>
+            <div class="map-delivery-pin"><i class="ti ti-map-pin" style="font-size:16px"></i></div>
+            <div class="map-label driver">You're here</div>
+            <div class="map-label dest">Delivery</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- ACTIVE ORDER -->
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">Active Orders</div>
+        ${deliveries.map(d=>`
+          <div class="active-order-card">
+            <div class="ao-head">
+              <span class="ao-badge">${d.status==='active'?'▶ Active':'Next Up'}</span>
+              <span class="ao-id">#${d.id}</span>
+            </div>
+            <div class="ao-customer">
+              <div class="ao-avatar">${d.customer[0]}</div>
+              <div>
+                <div class="ao-name">${d.customer}</div>
+                <div class="ao-addr"><i class="ti ti-map-pin" style="font-size:11px"></i> ${d.addr}</div>
+              </div>
+            </div>
+            <div class="ao-items">📦 ${d.items} · ₹${d.amount}</div>
+            <div class="ao-actions">
+              <button class="btn-pickup" onclick="showToast('Navigation started!','🗺️')">${d.status==='active'?'Mark Picked Up':'Start Delivery'}</button>
+              <button class="btn-navigate btn-navigate-styled" onclick="showToast('Opening maps...','🗺️')" style="background:none;border:1.5px solid var(--border);width:42px;height:42px;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px"><i class="ti ti-navigation"></i></button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function toggleDriverStatus(){state.driverOnline=!state.driverOnline;renderPage();showToast(state.driverOnline?'You are now Online':'You are now Offline',state.driverOnline?'🟢':'🔴');}
+
+function buildDriverHistory(){
+  const history=[
+    {id:'QW48180',customer:'Kiran Rao',addr:'Kondapur',amount:899,time:'2:34 PM',rating:5,status:'delivered'},
+    {id:'QW48165',customer:'Sneha Patel',addr:'Gachibowli',amount:2499,time:'1:12 PM',rating:5,status:'delivered'},
+    {id:'QW48120',customer:'Vikram Nair',addr:'Madhapur',amount:1199,time:'11:45 AM',rating:4,status:'delivered'},
+    {id:'QW48088',customer:'Anita Sharma',addr:'Hi-Tech City',amount:799,time:'10:20 AM',rating:5,status:'delivered'},
+    {id:'QW47990',customer:'Ravi Kumar',addr:'Jubilee Hills',amount:1899,time:'9:05 AM',rating:4,status:'delivered'},
+    {id:'QW47940',customer:'Pooja Singh',addr:'Film Nagar',amount:599,time:'Yesterday',rating:0,status:'cancelled'},
+  ];
+  return `
+    <div class="sec-title">Delivery History</div>
+    <div class="sec-sub">Your past ${history.length} deliveries</div>
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <table class="delivery-history-table" style="width:100%">
+          <thead>
+            <tr>
+              <th>Order ID</th><th>Customer</th><th>Location</th><th>Amount</th><th>Time</th><th>Rating</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${history.map(d=>`
+              <tr>
+                <td style="font-weight:700;font-size:13px">#${d.id}</td>
+                <td>${d.customer}</td>
+                <td style="color:var(--muted)">${d.addr}</td>
+                <td style="font-weight:700">₹${d.amount}</td>
+                <td style="color:var(--muted);font-size:13px">${d.time}</td>
+                <td>${d.rating>0?'★'.repeat(d.rating):'—'}</td>
+                <td><span class="status-badge ${d.status}">${d.status}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ===== PROFILE =====
+function buildProfile(){
+  return `
+    <div class="profile-wrap">
+      <div class="profile-header-card">
+        <div class="profile-avatar-big">A</div>
+        <div>
+          <div class="profile-name">Arjun Mehta</div>
+          <div class="profile-email">arjun@gmail.com · +91 98765 43210</div>
+          <div class="profile-badge">⚡ QUICK MEMBER</div>
+        </div>
+        <div style="margin-left:auto">
+          <button style="height:40px;padding:0 20px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:600;cursor:pointer">Edit Profile</button>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat"><div class="profile-stat-val">15</div><div class="profile-stat-label">Total Orders</div></div>
+        <div class="profile-stat"><div class="profile-stat-val">${state.wishlist.length}</div><div class="profile-stat-label">Wishlist</div></div>
+        <div class="profile-stat"><div class="profile-stat-val">₹18.2K</div><div class="profile-stat-label">Total Spent</div></div>
+      </div>
+      <div class="menu-list">
+        ${[
+          {icon:'ti-package',label:'My Orders',sub:'3 active, 12 delivered'},
+          {icon:'ti-heart',label:'Wishlist',sub:`${state.wishlist.length} items saved`,action:'wishlist'},
+          {icon:'ti-map-pin',label:'Saved Addresses',sub:'2 addresses'},
+          {icon:'ti-credit-card',label:'Payment Methods',sub:'UPI + 1 card saved'},
+          {icon:'ti-bell',label:'Notifications',sub:'All alerts enabled'},
+          {icon:'ti-help-circle',label:'Help & Support',sub:'FAQs, chat with us'},
+          {icon:'ti-logout',label:'Sign Out',sub:'',danger:true},
+        ].map(item=>`
+          <div class="menu-item" onclick="${item.action?`navigate('${item.action}')`:item.icon.includes('logout')?'logOut()':'showToast(\'Coming soon!\',\'🚧\')'}">
+            <div class="menu-item-icon" style="${item.danger?'background:#fff0ec':''}">
+              <i class="ti ${item.icon}" style="font-size:20px;${item.danger?'color:var(--coral)':''}"></i>
+            </div>
+            <div>
+              <div class="menu-item-label" style="${item.danger?'color:var(--coral)':''}">${item.label}</div>
+              ${item.sub?`<div class="menu-item-sub">${item.sub}</div>`:''}
+            </div>
+            <i class="ti ti-chevron-right" style="margin-left:auto;color:#ccc"></i>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function buildSettings(){
+  return `
+    <div class="profile-wrap">
+      <div class="sec-title">Settings</div>
+      <div class="sec-sub">Manage your account preferences</div>
+      <div class="menu-list">
+        ${['Account Security','Notification Preferences','Privacy & Data','Language & Region','About Quickware','Terms & Privacy Policy'].map(s=>`
+          <div class="menu-item" onclick="showToast('Coming soon!','🚧')">
+            <div style="flex:1;font-size:14px;font-weight:600">${s}</div>
+            <i class="ti ti-chevron-right" style="color:#ccc"></i>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function logOut(){document.getElementById('app-wrapper').style.display='none';document.getElementById('auth-wrapper').style.display='flex';renderAuth('login');}
+
+// ===== HELPERS =====
+function toggleWish(e,id){
+  e.stopPropagation();
+  if(state.wishlist.includes(id)) state.wishlist=state.wishlist.filter(x=>x!==id);
+  else state.wishlist.push(id);
+  renderPage();
+}
+
+function quickAdd(e,id){
+  e.stopPropagation();
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  addToCart(p,p.sizes[0]);
+  showToast(`${p.name} added to cart!`,'✓');
+  updateCartBadge();
+  renderPage();
+}
+
+function addToCart(p,size){
+  const key=p.id+size;
+  const exist=state.cart.find(c=>c.id+c.size===key);
+  if(exist) exist.qty++;
+  else state.cart.push({id:p.id,name:p.name,brand:p.brand,price:p.price,emoji:p.emoji,size,qty:1});
+  updateCartBadge();
+}
+
+function adjustQty(key,delta){
+  const item=state.cart.find(c=>c.id+c.size===key);
+  if(!item) return;
+  item.qty+=delta;
+  if(item.qty<=0) state.cart=state.cart.filter(c=>c.id+c.size!==key);
+  updateCartBadge();renderPage();
+}
+
+function removeItem(key){
+  state.cart=state.cart.filter(c=>c.id+c.size!==key);
+  updateCartBadge();renderPage();
+  showToast('Item removed','🗑️');
+}
+
+function attachPageEvents(){updateCartBadge();}
+
+// SIDEBAR TOGGLE
+document.getElementById('sb-toggle-btn').onclick=function(){
+  state.sidebarCollapsed=!state.sidebarCollapsed;
+  const sb=document.getElementById('sidebar');
+  const mc=document.getElementById('main-content');
+  sb.classList.toggle('collapsed',state.sidebarCollapsed);
+  mc.classList.toggle('sidebar-collapsed',state.sidebarCollapsed);
+  this.innerHTML=state.sidebarCollapsed?'<i class="ti ti-layout-sidebar-left-expand"></i>':'<i class="ti ti-layout-sidebar-left-collapse"></i>';
+};
+
+// SIDEBAR NAV
+document.getElementById('sb-nav').addEventListener('click',function(e){
+  const btn=e.target.closest('[data-nav]');
+  if(btn) navigate(btn.dataset.nav);
+});
+
+document.getElementById('logout-btn').onclick=logOut;
+
+// SEARCH
+document.getElementById('topbar-search-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&this.value.trim()){
+    navigate('shop');
+    showToast(`Searching for "${this.value.trim()}"...`,'🔍');
+    this.value='';
+  }
+});
+</script>
+</body>
+</html>
